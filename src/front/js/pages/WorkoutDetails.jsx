@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useParams, Link } from 'react-router-dom'; // Importa Link desde react-router-dom
 import "../../styles/workoutdetails.css";
 
 export const WorkoutDetails = () => {
     const { id } = useParams();
     const [workoutDetails, setWorkoutDetails] = useState([]);
+    const [workout, setWorkout] = useState({});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -29,8 +29,8 @@ export const WorkoutDetails = () => {
                 }
 
                 const data = await response.json();
-                console.log('Fetched data:', data);
-                setWorkoutDetails(data.results); 
+                console.log('Fetched workout details:', data);
+                setWorkoutDetails(data.results);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching workout details:', error.message);
@@ -38,8 +38,44 @@ export const WorkoutDetails = () => {
             }
         };
 
-        fetchWorkoutDetails();
+        const fetchWorkout = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('Token not found in localStorage.');
+                }
+
+                const response = await fetch(`${process.env.BACKEND_URL}/api/workouts/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Fetched workout:', data);
+                setWorkout(data.results); // Suponemos que aquí recibes el workout específico con el ID
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching workout:', error.message);
+                setLoading(false);
+            }
+        };
+
+        fetchWorkoutDetails(), fetchWorkout();
+
     }, [id]);
+
+    function formatDuration(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes} min ${seconds} seg`;
+    }
 
     const handleEdit = (exerciseId) => {
         // Manejar la edición del ejercicio
@@ -80,24 +116,32 @@ export const WorkoutDetails = () => {
 
     return (
         <div className="container">
-            <h1 className="text-white">Workout Details</h1>
-            <ul>
+            <div className='justify-content-around d-flex mb-5 mt-5'>
+                <img src="https://v2.exercisedb.io/image/vcLH762WnXfDay"></img>
+                <h3 className="text-white">Workout name: {workout.name}</h3>
+                <h3 className="text-white">Workout duration: {formatDuration(workout.duration)}</h3>
+            </div>
+            <ul className="list-group">
                 {workoutDetails.map((workout) => (
-                    <li key={workout.id} className="workout-detail-item">
-                        <div className="exercise-info">
-                            <h4 className="text-white">{workout.exercise_name}</h4>
-                            <img src={workout.exercise_gif} alt={workout.exercise_name} onError={(e) => {e.target.onerror = null; e.target.src="fallback-image-url"}} />
-                            <p className="text-white">Reps: {workout.reps_num}</p>
-                            <p className="text-white">Sets: {workout.series_num}</p>
-                            <p className="text-white">Rest: {workout.rest_seconds} sec</p>
-                        </div>
-                        <div className="exercise-actions">
-                            <FaEdit onClick={() => handleEdit(workout.id)} className="edit-icon" />
-                            <FaTrash onClick={() => handleDelete(workout.id)} className="delete-icon" />
+                    <li key={workout.id} className="list-group-item text-white d-flex justify-content-between align-items-center" style={{ backgroundColor: "rgba(1, 6, 16, 0.000)" }}>
+                        <img
+                            src={workout.exercise_gif}
+                            alt={workout.exercise_name}
+                            style={{ width: '100px', height: '100px', objectFit: 'cover', marginRight: '10px' }}
+                        />
+                        <span>
+                            {workout.exercise_name.toUpperCase()} - {workout.reps_num} reps, {workout.series_num} sets
+                        </span>
+                        <div>
+                            <i className="fas fa-trash-alt text-white fs-4 mx-5" title="Remove exercise" type="button" onClick={() => handleDelete(workout.id)}></i>
+                            <i className="fas fa-edit text-white fs-4" title="Remove exercise" type="button" onClick={() => handleEdit(workout.id)}></i>
                         </div>
                     </li>
                 ))}
             </ul>
+            
+            {/* Botón para volver a la lista de workouts */}
+            <Link to="/workouts" className="btn btn-outline-light rounded-pill text-orange border-orange mt-3">Back to Workouts</Link>
         </div>
     );
 };

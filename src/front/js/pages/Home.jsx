@@ -1,10 +1,8 @@
 import React from "react";
 import "../../styles/home.css";
 import SubirImagen from "../component/SubirImagen.jsx";
-import logo from "../../img/Logo1.webp";
 import rubiadef from "../../img/rubiadef.jpg";
 import hombre from "../../img/hombre-bn.webp";
-import chica from "../../img/ChicaNegro.webp";
 import { Link } from "react-router-dom";
 
 const textStyle = {

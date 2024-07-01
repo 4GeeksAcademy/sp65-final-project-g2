@@ -248,6 +248,32 @@ export const Workouts = () => {
         }));
     };
 
+    const handleDelete = async (workoutId) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('Token not found in localStorage.');
+            }
+
+            const response = await fetch(`${process.env.BACKEND_URL}/api/workouts/${workoutId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            // Actualizar la lista de workouts después de eliminar uno
+            setWorkouts(workouts.filter(workout => workout.id !== workoutId));
+        } catch (error) {
+            console.error('Error deleting workout:', error.message);
+        }
+    };
+
     const toggleShowRoutineExercises = () => {
         setShowRoutineExercises(!showRoutineExercises);
     };
@@ -498,6 +524,7 @@ export const Workouts = () => {
                                     <p className="card-text">Duration: {formatDuration(workout.duration)}</p>
                                     <p className="card-text">Exercises: {workout.exercises.length}</p>
                                     <Link to={`/workout-details/${workout.id}`} className="btn btn-outline-light rounded-pill text-orange border-orange">Details</Link>
+                                    <i className="fas fa-trash-alt  mx-2 fs-4 mt-3" type="button" title="Delete workout" onClick={() => handleDelete(workout.id)}></i>
 
                                 </div>
 
