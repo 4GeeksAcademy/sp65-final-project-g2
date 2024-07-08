@@ -3,8 +3,6 @@ import { Container, Row, Col, Card, Pagination, Spinner, Form } from 'react-boot
 import { useLocation } from 'react-router-dom';
 import { Context } from "../store/appContext";
 import "../../styles/exercises.css";
-
-const Exercises = () => {
   
   export const Exercises = () => {
 

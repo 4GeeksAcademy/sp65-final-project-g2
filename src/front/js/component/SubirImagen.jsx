@@ -9,7 +9,6 @@ const SubirImagen = () => {
     setSelectedFile(event.target.files[0]);
   };
 
-
   const handleSubmit = async (event) => {
     if (selectedFile) {
       const formData = new FormData();

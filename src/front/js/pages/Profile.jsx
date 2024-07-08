@@ -32,7 +32,6 @@ export const Profile = () => {
 
   const calculateBMI = (weight, height) => {
     if (weight <= 0 || height <= 0) return "N/A";
-
     const heightInMeters = height / 100;
     const bmi = weight / (heightInMeters * heightInMeters);
     return bmi.toFixed(1);
@@ -70,7 +69,6 @@ export const Profile = () => {
         },
         body: JSON.stringify(formData),
       });
-
       if (response.ok) {
         const data = await response.json();
         actions.setCurrentUser(data.results);
@@ -86,7 +84,6 @@ export const Profile = () => {
   const handleDeleteAccount = async () => {
     // Muestra la alerta de confirmación
     const confirmDelete = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
-
     if (confirmDelete) {
       try {
         const response = await fetch(`${process.env.BACKEND_URL}/api/users/${store.user.id}`, {
@@ -97,17 +94,13 @@ export const Profile = () => {
           },
           body: JSON.stringify({ ...formData, is_active: false }),
         });
-
         if (response.ok) {
           const data = await response.json();
           actions.setCurrentUser(data.results);
-
           // Cambiar el estado de isLogin a false para cerrar sesión
           actions.setIsLogin(false);
-
           // Mostrar alerta y redirigir al usuario después de un pequeño retardo
           alert("Your account has been deactivated.");
-
           // Redirigir después de un pequeño retardo para asegurar que las acciones anteriores se completen
           setTimeout(() => {
             navigate("/login");
@@ -120,7 +113,6 @@ export const Profile = () => {
       }
     }
   };
-
 
   return (
     <div className="container mt-4">
@@ -264,7 +256,7 @@ export const Profile = () => {
                     Body Mass Index is a measure that uses a person's weight and height to estimate their body fat. It's
                     calculated by dividing the weight in kilograms by the square of the height in meters. 
                   </p>
-                  <button className="btn btn-outline-danger mt-3" onClick={handleDeleteAccount}>
+                  <button className="btn btn-danger mt-3" onClick={handleDeleteAccount}>
                     Delete Account
                   </button>
                 </div>
