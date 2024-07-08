@@ -55,7 +55,7 @@ export const WorkoutDetails = () => {
                 }
                 const data = await response.json();
                 console.log('Fetched workout:', data);
-                setWorkout(data.results); // Suponemos que aquí recibes el workout específico con el ID
+                setWorkout(data.results); 
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching workout:', error.message);
@@ -75,13 +75,11 @@ export const WorkoutDetails = () => {
     const calculateTotalRoutineDuration = () => {
         let totalSeconds = 0;
         workoutDetails.forEach(exercise => {
-            // Aquí asumimos que cada ejercicio tiene una duración base. Ajusta esto según tu lógica.
             const exerciseDuration = exercise.duration || 60; // 60 segundos como valor por defecto si no hay duración.
             totalSeconds += exerciseDuration;
         });
 
-        // Si hay tiempos de descanso entre ejercicios, agrégalos aquí.
-        const restTime = 30; // Por ejemplo, 30 segundos de descanso entre ejercicios.
+        const restTime = 30; //30 segundos de descanso entre ejercicios.
         totalSeconds += (workoutDetails.length - 1) * restTime;
         return totalSeconds;
     };
