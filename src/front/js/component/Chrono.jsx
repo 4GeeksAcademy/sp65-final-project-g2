@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import "../../styles/chrono.css";
+import { Context } from "../store/appContext.js";
 
 const Chrono = () => {
+  const { store } = useContext(Context);
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [backgroundTime, setBackgroundTime] = useState(0);
   const [isBackgroundRunning, setIsBackgroundRunning] = useState(false);
   const intervalRef = useRef(null);
   const backgroundIntervalRef = useRef(null);
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     if (isRunning) {
@@ -66,28 +69,45 @@ const Chrono = () => {
     );
   };
 
+  const toggleChrono = () => {
+    if (store.isLogin) {
+      setIsActive(!isActive);
+    }
+  };
+
+  if (!store.isLogin) {
+    return null;
+  }
+
   return (
-    <div className='text-white text-center mt-5'>
-      <div className='d-flex justify-content-center align-items-center'>
-        <p className='mb-0'>ACTIVE time:&nbsp; </p>
-        <div className="roller-container mr-3 mb-0" style={{ width: '180px' }}>
-          {formatTime(time)}
-        </div>
-        <div className="px-4">
-          <button
-            onClick={handleStartStop}
-            className="btn btn-outline-white rounded-pill text-orange border-orange mx-2">
-            {isRunning ? 'Stop' : 'Start'}
-          </button>
-          <button
-            onClick={handleReset}
-            className="btn btn-outline-white rounded-pill text-orange border-orange mx-2">
-            Reset
-          </button>
-        </div>
-        <p className='mb-0'>REST time:&nbsp; </p>
-        <div className="roller-container mb-0" style={{ width: '180px' }}>
-          {formatTime(backgroundTime)}
+    <div>
+      <div className="chrono-bubble" onClick={toggleChrono}>
+        {isActive ? <span style={{ color: 'white', fontSize: '24px' }}>❌</span> : <i className="chrono-icon fas fa-clock"></i>}
+      </div>
+      <div className={`chrono-container ${isActive ? 'active' : ''}`}>
+        <div className='text-center mt-2'> {/* Reducido para ser más compacto */}
+          <div className='d-flex flex-column align-items-center'>
+            <p className='mb-0'>ACTIVE time:&nbsp; </p>
+            <div className="roller-container mb-2" style={{ width: '90px' }}> {/* Reducido al 50% */}
+              {formatTime(time)}
+            </div>
+            <div className="mb-2">
+              <button
+                onClick={handleStartStop}
+                className="btn btn-outline-primary rounded-pill mx-1">
+                {isRunning ? 'Stop' : 'Start'}
+              </button>
+              <button
+                onClick={handleReset}
+                className="btn btn-outline-primary rounded-pill mx-1">
+                Reset
+              </button>
+            </div>
+            <p className='mb-0'>REST time:&nbsp; </p>
+            <div className="roller-container" style={{ width: '90px' }}> {/* Reducido al 50% */}
+              {formatTime(backgroundTime)}
+            </div>
+          </div>
         </div>
       </div>
     </div>

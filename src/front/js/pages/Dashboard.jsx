@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import MotivationCarousel from "./MotivationCarousel.jsx"; // Importa el componente MotivationCarousel
 import ImageCarousel from "./ImageCarousel.jsx"; // Importa el componente ImageCarousel
 import "../../styles/dashboard.css";
-import Chrono from "./Chrono.jsx";//Importa el crono
+import Chrono from "../component/Chrono.jsx";//Importa el crono
 import Tips from "./Tips.jsx"; // Importa el componente Tips
 
 export const Dashboard = () => {

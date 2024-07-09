@@ -7,6 +7,7 @@ export const WorkoutDetails = () => {
     const { id } = useParams();
     const [workoutDetails, setWorkoutDetails] = useState([]);
     const [workout, setWorkout] = useState({});
+    const [exercises, setExercises] = useState({});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -28,7 +29,7 @@ export const WorkoutDetails = () => {
                 }
                 const data = await response.json();
                 console.log('Fetched workout details:', data);
-                setWorkoutDetails(data.results);
+                setWorkoutDetails(data.results || []);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching workout details:', error.message);
@@ -55,7 +56,7 @@ export const WorkoutDetails = () => {
                 }
                 const data = await response.json();
                 console.log('Fetched workout:', data);
-                setWorkout(data.results); 
+                setWorkout(data.results || {}); 
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching workout:', error.message);
@@ -63,8 +64,31 @@ export const WorkoutDetails = () => {
             }
         };
 
+        const fetchExercises = async () => {
+            try {
+                const response = await fetch('https://exercisedb.p.rapidapi.com/exercises?limit=2000&offset=0', {
+                    method: 'GET',
+                    headers: {
+                        'x-rapidapi-key': 'f335c9d4a1mshf5aa931e8c58f0ep101b9djsn062339dbf8b5',
+                        'x-rapidapi-host': 'exercisedb.p.rapidapi.com'
+                    }
+                });
+                const data = await response.json();
+                const filteredExercises = data.filter(exercise => exercise.id <= 1324);
+
+                const exercisesMap = {};
+                filteredExercises.forEach(exercise => {
+                    exercisesMap[exercise.name.toLowerCase()] = exercise.gifUrl;
+                });
+                setExercises(exercisesMap);
+            } catch (error) {
+                console.error('Error fetching the exercises:', error);
+            }
+        };
+
         fetchWorkoutDetails();
         fetchWorkout();
+        fetchExercises();
     }, [id]);
 
     function formatDuration(totalSeconds) {
@@ -72,6 +96,7 @@ export const WorkoutDetails = () => {
         const seconds = totalSeconds % 60;
         return `${minutes} min ${seconds} sec`;
     }
+
     const calculateTotalRoutineDuration = () => {
         let totalSeconds = 0;
         workoutDetails.forEach(exercise => {
@@ -113,12 +138,15 @@ export const WorkoutDetails = () => {
             console.error('Error deleting exercise:', error.message);
         }
     };
+
     if (loading) return <div>Loading...</div>;
     if (workoutDetails.length === 0) {
-        return <div className=''>
-            <h2 className='text-white mt-3 text-center'>No exercises in workout!</h2>
-            <Link to="/workouts" className="btn btn-outline-light rounded-pill text-orange border-orange mt-3">Back to Workouts</Link>
-        </div>;
+        return (
+            <div className=''>
+                <h2 className='text-white mt-3 text-center'>No exercises in workout!</h2>
+                <Link to="/workouts" className="btn btn-outline-light rounded-pill text-orange border-orange mt-3">Back to Workouts</Link>
+            </div>
+        );
     }
 
     const capitalizeFirstLetter = (string) => {
@@ -129,21 +157,22 @@ export const WorkoutDetails = () => {
         <div className="container">
             <div className='justify-content-around d-flex mb-5 mt-5'>
                 <h3 className="text-white">Workout name: {workout.name}</h3>
-                <h3 className="text-white">Workout duration: {formatDuration(workout.duration)}</h3>
+                <h3 className="text-white">Workout duration: {formatDuration(calculateTotalRoutineDuration())}</h3>
             </div>
             <ul className="list-group">
-                {workoutDetails.map((workout) => (
-                    <li key={workout.id} className="list-group-item text-white d-flex justify-content-between align-items-center" style={{ backgroundColor: "rgba(1, 6, 16, 0.000)" }}>
+                {workoutDetails.map((exercise) => (
+                    <li key={exercise.id} className="list-group-item text-white d-flex justify-content-between align-items-center" style={{ backgroundColor: "rgba(1, 6, 16, 0.8)" }}>
                         <img
-                            src={workout.exercise_gif}
-                            alt={workout.exercise_name}
+                            src={exercises[exercise.exercise_name.toLowerCase()] || 'fallback-image-url'}
+                            alt={exercise.exercise_name}
                             style={{ width: '100px', height: '100px', objectFit: 'cover', marginRight: '10px' }}
+                            onError={(e) => { e.target.onerror = null; e.target.src = 'fallback-image-url'; }} // Fallback en caso de error
                         />
                         <span>
-                            {capitalizeFirstLetter(workout.exercise_name)} - {workout.reps_num} reps, {workout.series_num} sets
+                            {capitalizeFirstLetter(exercise.exercise_name)} - {exercise.reps_num} reps, {exercise.series_num} sets
                         </span>
                         <div>
-                            <i className="fas fa-trash-alt text-danger fs-4 mx-5" title="Remove exercise" type="button" onClick={() => handleDelete(workout.id)}></i>
+                            <i className="fas fa-trash-alt text-danger fs-4 mx-5" title="Remove exercise" type="button" onClick={() => handleDelete(exercise.id)}></i>
                         </div>
                     </li>
                 ))}
