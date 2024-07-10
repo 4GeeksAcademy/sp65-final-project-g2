@@ -3,15 +3,15 @@ import { Container, Row, Col, Card, Pagination, Spinner, Form } from 'react-boot
 import { useLocation } from 'react-router-dom';
 import { Context } from "../store/appContext";
 import "../../styles/exercises.css";
-  
-  export const Exercises = () => {
+
+export const Exercises = () => {
 
   useEffect(() => {
     if (!store.isLogin) {
       navigate('/');
     }
   }, []);
-  
+
   const { store, actions } = useContext(Context);
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -165,12 +165,12 @@ const ExerciseCard = ({ exercise, isFavorite, actions }) => {
             <Card.Text><strong>Body Part:</strong> {exercise.bodyPart}</Card.Text>
             <Card.Text><strong>Target:</strong> {exercise.target}</Card.Text>
             <Card.Text><strong>Equipment:</strong> {exercise.equipment}</Card.Text>
-            <div className="justify-content-around d-flex fixed-bottom mb-3">
-              <i className="far fa-question-circle fs-2" onClick={handleFlip} title="+ Info" type="button"></i>
+            <div className="justify-content-around d-flex fixed-bottom mb-2 icons">
+              <i className="far fa-question-circle fs-2 circle" onClick={handleFlip} title="+ Info" type="button"></i>
               {isFavorite ? (
-                <i className="fas fa-heart float-end fa-lg pt-3 text-danger fs-2" type="button" onClick={() => actions.removeFavorite(exercise.id)} title="Remove Favorite"></i>
+                <i className="fas fa-heart float-end fa-lg pt-3 text-danger fs-2 hearts" type="button" onClick={() => actions.removeFavorite(exercise.id)} title="Remove Favorite"></i>
               ) : (
-                <i className="far fa-heart float-end fa-lg pt-3 text-danger fs-2" type="button" onClick={() => actions.addFavorite(exercise)} title="Add Favorite"></i>
+                <i className="far fa-heart float-end fa-lg pt-3 text-danger fs-2 hearts" type="button" onClick={() => actions.addFavorite(exercise)} title="Add Favorite"></i>
               )}
             </div>
           </div>

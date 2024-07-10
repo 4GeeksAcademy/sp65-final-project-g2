@@ -20,6 +20,7 @@ import { PrivacyPolicy } from "./pages/PrivacyPolicy.jsx";
 import { ConditionsTerms } from "./pages/ConditionsTerms.jsx";
 import Contact from "./pages/Contact.jsx";
 import ChatBot from "./component/Chatbot.jsx";
+import Chrono from "./component/Chrono.jsx";
 
 // Create your first component
 const Layout = () => {
@@ -29,7 +30,7 @@ const Layout = () => {
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
 
     return (
-        <div className="">
+        <div className="d-flex flex-column min-vh-100">
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
                     <Navbar />
@@ -49,6 +50,7 @@ const Layout = () => {
                         <Route element={<h1>Not found!</h1>} path="*" />
                     </Routes>
                     <ChatBot />
+                    <Chrono />
                     <Footer />
                 </ScrollToTop>
             </BrowserRouter>

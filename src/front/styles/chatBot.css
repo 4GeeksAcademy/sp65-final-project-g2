@@ -1,8 +1,9 @@
+/* src/front/styles/chatBot.css */
 .chatbot-container {
     position: fixed;
-    bottom: 20px;
+    bottom: 20px; /* Ajuste para mantener la posición original */
     right: 20px;
-    z-index: 1000;
+    z-index: 1500; /* Valor más alto para que esté encima de Chrono */
 }
 
 .chatbot-icon {
@@ -16,6 +17,29 @@
     justify-content: center;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+@media (max-width: 768px) {
+.chatbot-icon {
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: -10px;
+    }
+}
+
+.chatbot-icon.open {
+    background-color: #007bff; /* Mantener el mismo color de fondo */
+}
+
+.chatbot-icon.open span {
+    color: black; /* Asegura que la X sea negra */
 }
 
 .chatbot-icon:hover {

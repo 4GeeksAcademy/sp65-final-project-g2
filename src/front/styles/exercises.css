@@ -75,10 +75,49 @@
   .exercise-card {
     width: calc(100% - 30px); /* Tarjeta ocupa todo el ancho con margen en pantallas pequeñas */
   }
+  .hearts{
+    margin-bottom: 10px;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .circle{
+    margin-bottom: 10px;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .pagination-container {
   display: flex;
   justify-content: center;
-  overflow-x: auto;
+  overflow-x: auto; /* Permite el desplazamiento horizontal */
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap; /* Asegura que los elementos se ajusten en pantallas pequeñas */
+}
+
+.pagination .page-item .page-link {
+  color: #FF8C00;
+  background-color: #272C34;
+  border: none;
+}
+
+.pagination .page-item .page-link:hover {
+  background-color: white;
+  color: #FF8C00;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #FF8C00;
+  border-color: #FF8C00;
+  color: white;
+}
+
+.pagination .page-item.active .page-link:hover {
+  background-color: white;
+  color: #FF8C00;
 }

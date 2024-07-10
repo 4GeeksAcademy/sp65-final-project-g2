@@ -1,47 +1,64 @@
-.roller {
-  border: 1px solid rgb(0, 229, 255);
-  border-radius: 4px;
-  padding: 3px;
-  display: inline-block;
-  font-size: 24px;
-  margin: 0 2px;
+/* src/front/styles/chrono.css */
+.chrono-bubble {
+  position: fixed;
+  bottom: 100px; /* Ajustado para estar más arriba */
+  right: 20px;
+  width: 50px; /* Tamaño ajustado para coincidir con el del chatbot */
+  height: 50px; /* Tamaño ajustado para coincidir con el del chatbot */
+  border-radius: 50%;
+  background-color: #007bff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 100;
+}
+
+.chrono-icon {
+  color: white;
+  font-size: 20px; /* Tamaño ajustado para coincidir con el del chatbot */
+}
+
+.chrono-container {
+  position: fixed;
+  bottom: 170px; /* Ajustado para estar más arriba */
+  right: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: none;
+  z-index: 999;
+  padding: 10px; /* Reducido para ser más compacto */
+  max-width: 150px; /* Reducido al 50% */
+}
+
+.chrono-container.active {
+  display: block;
 }
 
 .roller-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 14px; /* Reducido para ser más compacto */
 }
 
+button {
+  font-size: 12px; /* Reducido para ser más compacto */
+  padding: 5px 10px; /* Reducido para ser más compacto */
+}
 
+.roller {
+  font-size: 16px; /* Reducido para ser más compacto */
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .roller {
-    font-size: 18px; 
-    padding: 2px; 
-    margin: 0 1px; 
+  .chrono-container {
+      right: 10px;
+      bottom: 150px;
   }
 
-  .roller-container {
-    flex-wrap: nowrap;
-  }
-
-  .btn {
-    font-size: 14px;
-    margin: 5px 0;
-  }
-
-  .text-center {
-    font-size: 16px;
-  }
-
-  .d-flex {
-    flex-direction: column; 
-    align-items: center;
-  }
-
-  .roller-container,
-  .px-4,
-  .mb-0 {
-    margin-bottom: 10px;
+  .chrono-bubble {
+      bottom: 80px;
+      right: 10px;
   }
 }
