@@ -161,7 +161,7 @@ export const WorkoutDetails = () => {
             </div>
             <ul className="list-group">
                 {workoutDetails.map((exercise) => (
-                    <li key={exercise.id} className="list-group-item text-white d-flex justify-content-between align-items-center" style={{ backgroundColor: "rgba(1, 6, 16, 0.8)" }}>
+                    <li key={exercise.id} className="list-group-item text-white d-flex justify-content-between align-items-center" style={{ backgroundColor: "rgba(1, 6, 16, 0.0)" }}>
                         <img
                             src={exercises[exercise.exercise_name.toLowerCase()] || 'fallback-image-url'}
                             alt={exercise.exercise_name}
